@@ -1,0 +1,12 @@
+# Dependencies
+node_modules
+
+# Production
+dist
+
+# Env files
+.env
+.env.local
+
+# Sanity
+.sanity

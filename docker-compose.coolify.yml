@@ -1,0 +1,82 @@
+# Docker Compose configuration for Coolify deployment
+#
+# Deployment strategy:
+# - App: Public-facing website (yourdomain.com)
+# - Studio: Private/secured CMS (studio.yourdomain.com with auth)
+#
+# Setup in Coolify:
+# 1. Create new resource → Docker Compose
+# 2. Use this file: docker-compose.coolify.yml
+# 3. Configure domains in Coolify UI
+# 4. Add environment variables
+
+services:
+  # Public Next.js Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_SANITY_PROJECT_ID=${NEXT_PUBLIC_SANITY_PROJECT_ID}
+        - NEXT_PUBLIC_SANITY_DATASET=${NEXT_PUBLIC_SANITY_DATASET}
+        - NEXT_PUBLIC_SANITY_API_VERSION=${NEXT_PUBLIC_SANITY_API_VERSION}
+    container_name: personal-hub-app
+    environment:
+      - NEXT_PUBLIC_SANITY_PROJECT_ID=${NEXT_PUBLIC_SANITY_PROJECT_ID}
+      - NEXT_PUBLIC_SANITY_DATASET=${NEXT_PUBLIC_SANITY_DATASET}
+      - NEXT_PUBLIC_SANITY_API_VERSION=${NEXT_PUBLIC_SANITY_API_VERSION}
+      - SANITY_API_TOKEN=${SANITY_API_TOKEN}
+      - SANITY_REVALIDATE_SECRET=${SANITY_REVALIDATE_SECRET}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      # Coolify configuration for app
+      - "coolify.managed=true"
+      - "coolify.name=app"
+      - "coolify.type=application"
+      - "coolify.port=3000"
+      # Public domain - no authentication
+      - "coolify.fqdn=casperdamen.eu"
+      - "coolify.https=true"
+    networks:
+      - personal-hub-network
+
+  # Private Sanity Studio
+  studio:
+    build:
+      context: .
+      dockerfile: studio/Dockerfile
+      args:
+        - SANITY_STUDIO_PROJECT_ID=${SANITY_STUDIO_PROJECT_ID}
+        - SANITY_STUDIO_DATASET=${SANITY_STUDIO_DATASET}
+    container_name: personal-hub-studio
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3333/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+    labels:
+      # Coolify configuration for studio
+      - "coolify.managed=true"
+      - "coolify.name=studio"
+      - "coolify.type=application"
+      - "coolify.port=3333"
+      # Private subdomain with basic auth
+      - "coolify.fqdn=studio.casperdamen.eu"
+      - "coolify.https=true"
+      # Add basic auth as extra security layer (optional but recommended)
+      # Set username/password in Coolify UI under Security settings
+      - "coolify.basicAuth.enabled=true"
+    networks:
+      - personal-hub-network
+
+networks:
+  personal-hub-network:
+    driver: bridge
