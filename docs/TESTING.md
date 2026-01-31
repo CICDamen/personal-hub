@@ -47,6 +47,23 @@ Tests are automatically run on:
 
 The CI workflow (`.github/workflows/test.yml`) uses Bun for fast dependency installation and runs Jest via `bun run test`.
 
+#### Environment Variables for CI/CD
+
+The CI workflow requires Sanity environment variables to be set for the build step. These are configured as mock values in the workflow file:
+
+- `NEXT_PUBLIC_SANITY_PROJECT_ID` - Mock project ID for build
+- `NEXT_PUBLIC_SANITY_DATASET` - Mock dataset name for build
+- `NEXT_PUBLIC_SANITY_API_VERSION` - API version
+- `SANITY_API_TOKEN` - Mock token for build
+- `SANITY_REVALIDATE_SECRET` - Mock secret for build
+
+**Note:** Unit tests don't require real Sanity credentials because:
+1. Tests mock all Sanity client imports
+2. Mapper functions operate on plain JavaScript objects
+3. Component tests use mocked image utilities
+
+The mock environment variables are only needed for Next.js build validation in CI.
+
 ## Test Structure
 
 Tests are organized alongside the code they test:
