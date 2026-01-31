@@ -28,13 +28,13 @@ Test configuration is defined in:
 
 ```bash
 # Run all tests
-npm test
+bun test
 
 # Run tests in watch mode
-npm run test:watch
+bun run test:watch
 
 # Run tests with coverage report
-npm run test:coverage
+bun run test:coverage
 ```
 
 ### Continuous Integration
@@ -43,7 +43,7 @@ Tests are automatically run on:
 - Pull requests to the `main` branch
 - Pushes to the `main` branch
 
-The CI workflow (`.github/workflows/test.yml`) runs tests on Node.js versions 18.x and 20.x.
+The CI workflow (`.github/workflows/test.yml`) uses Bun for fast dependency installation and test execution.
 
 ## Test Structure
 
@@ -177,9 +177,9 @@ jest.mock('@/lib/sanity/image', () => ({
 
 ### Tests Fail Locally But Pass in CI
 
-- Ensure you have all dependencies installed: `npm ci --legacy-peer-deps`
-- Clear Jest cache: `npx jest --clearCache`
-- Check Node.js version matches CI (18.x or 20.x)
+- Ensure you have all dependencies installed: `bun install`
+- Clear Jest cache: `bunx jest --clearCache`
+- Verify you're using the latest Bun version
 
 ### Tests Pass Locally But Fail in CI
 
