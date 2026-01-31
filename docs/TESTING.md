@@ -27,8 +27,8 @@ Test configuration is defined in:
 ### Local Development
 
 ```bash
-# Run all tests
-bun test
+# Run all tests (uses Jest via Bun)
+bun run test
 
 # Run tests in watch mode
 bun run test:watch
@@ -37,13 +37,15 @@ bun run test:watch
 bun run test:coverage
 ```
 
+Note: Use `bun run test` instead of `bun test` to ensure Jest is used (Bun has its own test runner which doesn't support our React Testing Library setup).
+
 ### Continuous Integration
 
 Tests are automatically run on:
 - Pull requests to the `main` branch
 - Pushes to the `main` branch
 
-The CI workflow (`.github/workflows/test.yml`) uses Bun for fast dependency installation and test execution.
+The CI workflow (`.github/workflows/test.yml`) uses Bun for fast dependency installation and runs Jest via `bun run test`.
 
 ## Test Structure
 
