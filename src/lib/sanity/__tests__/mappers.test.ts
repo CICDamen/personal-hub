@@ -154,7 +154,7 @@ describe('mapPost', () => {
       alt: 'Thumbnail',
     },
     author: 'John Doe',
-    readingTime: '5 min read',
+    readingTime: 5,
     content: 'Blog post content here',
   }
 
@@ -167,7 +167,7 @@ describe('mapPost', () => {
     expect(result.slug).toBe('test-blog-post')
     expect(result.publishedDate).toBe('2024-01-15')
     expect(result.author).toBe('John Doe')
-    expect(result.readingTime).toBe('5 min read')
+    expect(result.readingTime).toBe(5)
     expect(result.content).toBe('Blog post content here')
     expect(result.thumbnail).toBeDefined()
   })
@@ -280,7 +280,7 @@ describe('mapPosts', () => {
         slug: { current: 'post-1', _type: 'slug' },
         publishedDate: '2024-01-01',
         author: 'Author 1',
-        readingTime: '5 min',
+        readingTime: 5,
         content: 'Content 1',
       },
       {
@@ -291,7 +291,7 @@ describe('mapPosts', () => {
         slug: { current: 'post-2', _type: 'slug' },
         publishedDate: '2024-01-02',
         author: 'Author 2',
-        readingTime: '3 min',
+        readingTime: 3,
         content: 'Content 2',
       },
     ]

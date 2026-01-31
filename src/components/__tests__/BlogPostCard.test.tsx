@@ -34,7 +34,7 @@ describe('BlogPostCard Component', () => {
       alt: 'React tutorial thumbnail',
     },
     author: 'John Doe',
-    readingTime: '5 min read',
+    readingTime: 5,
     content: 'Full post content',
   }
 
@@ -69,8 +69,7 @@ describe('BlogPostCard Component', () => {
   it('should render reading time when provided', () => {
     render(<BlogPostCard post={mockPost} />)
 
-    // The component appends " min read" to the readingTime value
-    expect(screen.getByText('5 min read min read')).toBeInTheDocument()
+    expect(screen.getByText('5 min read')).toBeInTheDocument()
   })
 
   it('should not render thumbnail when not provided', () => {
