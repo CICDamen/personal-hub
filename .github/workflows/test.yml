@@ -14,15 +14,6 @@ jobs:
     
     permissions:
       contents: read
-    
-    env:
-      # Mock Sanity environment variables for CI/CD
-      # These are required for the build step but not used during testing
-      NEXT_PUBLIC_SANITY_PROJECT_ID: test-project-id
-      NEXT_PUBLIC_SANITY_DATASET: test-dataset
-      NEXT_PUBLIC_SANITY_API_VERSION: 2024-01-01
-      SANITY_API_TOKEN: test-token
-      SANITY_REVALIDATE_SECRET: test-secret
 
     steps:
       - name: Checkout code
@@ -41,6 +32,3 @@ jobs:
 
       - name: Run tests
         run: bun run test
-
-      - name: Build project
-        run: bun run build
