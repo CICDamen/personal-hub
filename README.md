@@ -191,6 +191,7 @@ Comprehensive documentation is available in the `docs/` directory:
 - **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - System architecture, component design, data flow, and technology decisions
 - **[API.md](./docs/API.md)** - Complete API reference for CMS functions, GROQ queries, and data types
 - **[DEPLOYMENT.md](./docs/DEPLOYMENT.md)** - Deployment guides for Coolify, Docker, and manual deployment
+- **[TESTING.md](./docs/TESTING.md)** - Testing setup, running tests, and writing new tests
 - **[Studio README](./studio/README.md)** - Sanity Studio setup and usage guide
 
 ### Quick Links
@@ -200,6 +201,7 @@ Comprehensive documentation is available in the `docs/` directory:
 - [Coolify Deployment](./docs/DEPLOYMENT.md#coolify-deployment-recommended)
 - [Docker Deployment](./docs/DEPLOYMENT.md#docker-deployment)
 - [Performance Strategy](./docs/ARCHITECTURE.md#performance-strategy)
+- [Testing Guide](./docs/TESTING.md)
 
 Exit draft mode: `https://your-site.com/api/disable-draft`
 
@@ -215,6 +217,7 @@ See [DEPLOYMENT.md](./docs/DEPLOYMENT.md) for complete deployment guides coverin
 ```bash
 bun run dev     # Development mode with hot reload
 bun run lint    # Type checking
+bun run test    # Run unit tests
 bun run build   # Build for production
 bun start       # Start production server
 ```
