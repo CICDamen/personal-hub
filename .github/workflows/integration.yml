@@ -37,9 +37,10 @@ jobs:
         run: bun run build
 
       - name: Start app
-        run: bun run start &
+        run: node .next/standalone/server.js &
         env:
           PORT: 3000
+          HOSTNAME: 0.0.0.0
 
       - name: Wait for app to be ready
         run: |
