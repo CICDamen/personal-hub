@@ -1,0 +1,48 @@
+name: Integration Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    env:
+      NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+      NEXT_PUBLIC_SANITY_DATASET: development
+      NEXT_PUBLIC_SANITY_API_VERSION: "2024-01-01"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Build app
+        run: bun run build
+
+      - name: Start app
+        run: bun run start &
+        env:
+          PORT: 3000
+
+      - name: Wait for app to be ready
+        run: |
+          timeout 30 bash -c 'until curl -sf http://localhost:3000/; do sleep 1; done'
+
+      - name: Run integration tests
+        run: bun run test:integration

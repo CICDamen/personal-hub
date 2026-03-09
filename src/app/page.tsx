@@ -9,8 +9,8 @@ import {
   getRecentBlogPosts,
 } from '@/lib/cms'
 
-// Revalidate this page every 30 minutes (1800 seconds)
-export const revalidate = 1800
+// Render dynamically to avoid build-time Sanity dependency
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata(): Promise<Metadata> {
   const homepage = await getHomepageContent()
