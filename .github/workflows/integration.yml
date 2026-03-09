@@ -36,15 +36,23 @@ jobs:
       - name: Build app
         run: bun run build
 
+      - name: Copy static assets to standalone
+        run: |
+          cp -r .next/static .next/standalone/.next/static
+          cp -r public .next/standalone/public
+
       - name: Start app
-        run: node .next/standalone/server.js &
+        run: node .next/standalone/server.js > /tmp/server.log 2>&1 &
         env:
           PORT: 3000
           HOSTNAME: 0.0.0.0
 
       - name: Wait for app to be ready
-        run: |
-          timeout 30 bash -c 'until curl -sf http://localhost:3000/; do sleep 1; done'
+        run: timeout 30 bash -c 'until curl -sf http://localhost:3000/; do sleep 1; done'
+
+      - name: Show server logs on failure
+        if: failure()
+        run: cat /tmp/server.log
 
       - name: Run integration tests
         run: bun run test:integration
