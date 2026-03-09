@@ -12,14 +12,14 @@ services:
     ports:
       - "3000:3000"
     environment:
-      # Sanity Configuration
       - NEXT_PUBLIC_SANITY_PROJECT_ID=${NEXT_PUBLIC_SANITY_PROJECT_ID}
       - NEXT_PUBLIC_SANITY_DATASET=${NEXT_PUBLIC_SANITY_DATASET}
       - NEXT_PUBLIC_SANITY_API_VERSION=${NEXT_PUBLIC_SANITY_API_VERSION}
       - SANITY_API_TOKEN=${SANITY_API_TOKEN}
       - SANITY_REVALIDATE_SECRET=${SANITY_REVALIDATE_SECRET}
     env_file:
-      - .env.local
+      - path: .env.local
+        required: false
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000"]
@@ -30,9 +30,11 @@ services:
     networks:
       - personal-hub-network
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`yourdomain.com`)"
-      - "traefik.http.services.app.loadbalancer.server.port=3000"
+      - "coolify.managed=true"
+      - "coolify.name=app"
+      - "coolify.port=3000"
+      - "coolify.fqdn=casperdamen.eu"
+      - "coolify.https=true"
 
   # Sanity Studio
   studio:
@@ -47,7 +49,7 @@ services:
       - "3333:3333"
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3333/health"]
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3333/"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -55,15 +57,13 @@ services:
     networks:
       - personal-hub-network
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.studio.rule=Host(`studio.yourdomain.com`)"
-      - "traefik.http.services.studio.loadbalancer.server.port=3333"
+      - "coolify.managed=true"
+      - "coolify.name=studio"
+      - "coolify.port=3333"
+      - "coolify.fqdn=studio.casperdamen.eu"
+      - "coolify.https=true"
+      - "coolify.basicAuth.enabled=true"
 
 networks:
   personal-hub-network:
     driver: bridge
-
-# Optional: Add volumes for persistent data if needed
-# volumes:
-#   app_data:
-#   studio_data:

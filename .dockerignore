@@ -72,5 +72,8 @@ docs/
 
 # Docker
 Dockerfile
-docker-compose.yml
+docker-compose*.yml
 .dockerignore
+
+# npm lockfile (using bun)
+package-lock.json
