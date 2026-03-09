@@ -48,7 +48,7 @@ jobs:
           HOSTNAME: 0.0.0.0
 
       - name: Wait for app to be ready
-        run: timeout 30 bash -c 'until curl -sf http://localhost:3000/; do sleep 1; done'
+        run: timeout 30 bash -c 'until curl -sf http://localhost:3000/api/health; do sleep 1; done'
 
       - name: Show server logs on failure
         if: failure()

@@ -28,19 +28,19 @@ import { mapHomepage, mapPost, mapProject, mapPosts, mapProjects } from './sanit
  * @returns Homepage content
  * @throws Error if homepage document is not found or invalid
  */
-export async function getHomepageContent(preview = false): Promise<Homepage> {
+export async function getHomepageContent(preview = false): Promise<Homepage | null> {
   try {
     const client = getClient(preview)
     const data = await client.fetch<SanityHomepage>(homepageQuery)
 
     if (!data) {
-      throw new Error('Homepage document not found in Sanity')
+      return null
     }
 
     return mapHomepage(data)
   } catch (error) {
     console.error('Error fetching homepage content:', error)
-    throw new Error('Failed to fetch homepage content')
+    return null
   }
 }
 

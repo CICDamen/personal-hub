@@ -6,25 +6,31 @@
 
 const BASE_URL = process.env.INTEGRATION_BASE_URL || 'http://localhost:3000'
 
-const ROUTES = [
-  { path: '/', label: 'homepage' },
-  { path: '/blog', label: 'blog listing' },
-  { path: '/projects', label: 'projects listing' },
-]
-
 describe('smoke tests', () => {
-  for (const { path, label } of ROUTES) {
-    it(`${label} (${path}) returns 200`, async () => {
-      const response = await fetch(`${BASE_URL}${path}`)
-      expect(response.status).toBe(200)
-    })
-  }
+  it('health check returns 200', async () => {
+    const response = await fetch(`${BASE_URL}/api/health`)
+    expect(response.status).toBe(200)
+  })
 
-  it('homepage contains expected content', async () => {
+  it('homepage returns 200', async () => {
+    const response = await fetch(`${BASE_URL}/`)
+    expect(response.status).toBe(200)
+  })
+
+  it('blog listing returns 200', async () => {
+    const response = await fetch(`${BASE_URL}/blog`)
+    expect(response.status).toBe(200)
+  })
+
+  it('projects listing returns 200', async () => {
+    const response = await fetch(`${BASE_URL}/projects`)
+    expect(response.status).toBe(200)
+  })
+
+  it('homepage does not render an error page', async () => {
     const response = await fetch(`${BASE_URL}/`)
     const html = await response.text()
     expect(html).toContain('<!DOCTYPE html>')
-    // Sanity content should be present (not an error page)
     expect(html).not.toContain('Application error')
   })
 })

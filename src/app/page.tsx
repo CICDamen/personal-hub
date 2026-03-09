@@ -15,6 +15,10 @@ export const dynamic = 'force-dynamic'
 export async function generateMetadata(): Promise<Metadata> {
   const homepage = await getHomepageContent()
 
+  if (!homepage) {
+    return { title: 'Coming Soon' }
+  }
+
   return {
     title: `${homepage.name} | ${homepage.title}`,
     description: homepage.tagline,
@@ -44,6 +48,14 @@ export default async function HomePage() {
     getFeaturedProjects(3),
     getRecentBlogPosts(3),
   ])
+
+  if (!homepage) {
+    return (
+      <main>
+        <p>Content coming soon.</p>
+      </main>
+    )
+  }
 
   return (
     <main>
