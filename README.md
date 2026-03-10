@@ -144,33 +144,47 @@ Open [http://localhost:3000](http://localhost:3000) to view the homepage.
 
 ## Sanity CMS Setup
 
-This application uses Sanity.io for content management with a built-in Studio.
+This application uses Sanity.io for content management. All content lives in **Sanity's cloud** — the studio is just an admin UI to edit that content, and the Next.js app fetches data directly from Sanity's API. They never communicate with each other.
 
-### Quick Setup
+```
+Sanity Cloud (api.sanity.io)
+        ↑                  ↑
+   Next.js app         Studio (admin UI)
+  reads content        edits content
+```
 
-1. **Set up Sanity Studio:**
+This means the studio does **not** need to be publicly accessible for the website to work. Both services use independent API tokens to authenticate with Sanity's cloud.
+
+### Credentials
+
+Required environment variables:
+- **`NEXT_PUBLIC_SANITY_PROJECT_ID`**: From Sanity project settings
+- **`NEXT_PUBLIC_SANITY_DATASET`**: Your dataset name (e.g. `production`)
+- **`NEXT_PUBLIC_SANITY_API_VERSION`**: API version date (e.g. `2024-01-01`)
+- **`SANITY_API_TOKEN`**: API token from Sanity → Settings → API → Tokens (read permissions)
+- **`SANITY_REVALIDATE_SECRET`**: Random string for webhook security
+
+### Studio Access
+
+The studio is deployed as a private service on Coolify (no public domain). To access it:
+
+```bash
+# Forward the studio port via SSH tunnel
+ssh -L 3333:localhost:3333 user@your-hetzner-ip
+
+# Then open in browser
+http://localhost:3333
+```
+
+To run the studio locally without deploying it:
 ```bash
 cd studio
 bun install
-cp .env.example .env
-# Edit .env with your SANITY_STUDIO_PROJECT_ID and SANITY_STUDIO_DATASET
 bun run dev  # Runs at http://localhost:3333
 ```
 
-2. **Configure application environment:**
-```bash
-cp .env.local.example .env.local
-# Edit .env.local with your Sanity credentials
-```
+### Content Types
 
-Required credentials:
-- **Project ID**: From Sanity project settings
-- **API Token**: Generate in Sanity project settings → API → Tokens (Read permissions)
-- **Revalidate Secret**: Random string for webhook security
-
-### Content Management
-
-Create these document types in your Sanity Studio:
 - **Homepage**: Personal information, headshot, bio, links
 - **Posts**: Blog articles with content and images
 - **Projects**: Portfolio pieces with case studies

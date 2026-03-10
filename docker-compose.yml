@@ -62,7 +62,6 @@ services:
       - "coolify.port=3333"
       - "coolify.fqdn=studio.casperdamen.eu"
       - "coolify.https=true"
-      - "coolify.basicAuth.enabled=true"
 
 networks:
   personal-hub-network:
