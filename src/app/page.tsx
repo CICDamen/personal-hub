@@ -9,8 +9,7 @@ import {
   getRecentBlogPosts,
 } from '@/lib/cms'
 
-// Render dynamically to avoid build-time Sanity dependency
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600
 
 export async function generateMetadata(): Promise<Metadata> {
   const homepage = await getHomepageContent()
