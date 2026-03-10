@@ -24,20 +24,35 @@ Test configuration is defined in:
 
 ## Running Tests
 
-### Local Development
+### Unit Tests
 
 ```bash
-# Run all tests (uses Jest via Bun)
+# Run all unit tests
 bun run test
 
-# Run tests in watch mode
+# Run in watch mode
 bun run test:watch
 
-# Run tests with coverage report
+# Run with coverage report
 bun run test:coverage
 ```
 
 Note: Use `bun run test` instead of `bun test` to ensure Jest is used (Bun has its own test runner which doesn't support our React Testing Library setup).
+
+### Integration / Smoke Tests
+
+Smoke tests verify that key routes return 200 on a running app. Requires the app to be running first:
+
+```bash
+# Start the app (in a separate terminal)
+bun run dev   # or: docker-compose up -d
+
+# Run smoke tests (defaults to http://localhost:3000)
+bun run test:integration
+
+# Run against a different URL
+INTEGRATION_BASE_URL=https://casperdamen.eu bun run test:integration
+```
 
 ### Continuous Integration
 
@@ -56,9 +71,13 @@ The CI workflow (`.github/workflows/test.yml`) uses Bun for fast dependency inst
 
 ## Test Structure
 
-Tests are organized alongside the code they test:
+Unit tests live co-located with the source files they cover. Integration tests live in the top-level `tests/` directory since they test the running app as a whole rather than individual files.
 
 ```
+tests/
+└── integration/
+    └── smoke.test.ts         # Route smoke tests (requires running app)
+
 src/
 ├── components/
 │   ├── __tests__/
@@ -66,16 +85,17 @@ src/
 │   │   ├── BlogPostCard.test.tsx
 │   │   ├── Hero.test.tsx
 │   │   └── ProjectCard.test.tsx
-│   ├── About.tsx
-│   ├── BlogPostCard.tsx
-│   ├── Hero.tsx
-│   └── ProjectCard.tsx
+│   └── ...
 └── lib/
     └── sanity/
         ├── __tests__/
         │   └── mappers.test.ts
         └── mappers.ts
 ```
+
+Each test suite uses its own Jest config:
+- `jest.config.ts` — unit tests (`src/**/__tests__/`)
+- `jest.integration.config.ts` — integration tests (`tests/integration/`)
 
 ## Test Coverage
 

@@ -244,12 +244,14 @@ bun start       # Start production server
 
 ## Content Updates
 
-Content is automatically refreshed using ISR (Incremental Static Regeneration):
-- **Homepage**: Every 30 minutes
-- **Blog posts**: Every 1 hour
-- **Projects**: Every 1 hour
+All pages use ISR (Incremental Static Regeneration) and revalidate every 1 hour:
+- **Homepage**: `revalidate = 3600`
+- **Blog posts**: `revalidate = 3600`
+- **Projects**: `revalidate = 3600`
 
-For immediate updates, set up Sanity webhooks or redeploy the application.
+For immediate cache invalidation, set up Sanity webhooks or redeploy.
+
+> **Note:** The Coolify build requires `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET` to be set as build arguments so Next.js can pre-render pages at build time.
 
 ## Troubleshooting
 
