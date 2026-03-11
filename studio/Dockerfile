@@ -44,7 +44,7 @@ EXPOSE 3333
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD wget --quiet --tries=1 --spider http://localhost:3333/ || exit 1
+  CMD wget --quiet --tries=1 --spider http://127.0.0.1:3333/ || exit 1
 
 # Serve static files with proper SPA routing
-CMD ["serve", "dist", "-l", "3333", "--no-clipboard", "--single"]
+CMD ["serve", "dist", "-l", "tcp:0.0.0.0:3333", "--no-clipboard", "--single"]
