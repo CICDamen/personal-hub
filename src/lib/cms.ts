@@ -6,8 +6,8 @@
  * to ensure backward compatibility with existing page components.
  */
 
-import type { Homepage, Project, BlogPost } from '@/types/cms'
-import type { SanityHomepage, SanityPost, SanityProject } from '@/types/cms'
+import type { Homepage, Project, BlogPost, Skills } from '@/types/cms'
+import type { SanityHomepage, SanityPost, SanityProject, SanitySkills } from '@/types/cms'
 import { getClient } from './sanity/client'
 import {
   homepageQuery,
@@ -19,8 +19,9 @@ import {
   projectBySlugQuery,
   allProjectSlugsQuery,
   featuredProjectsQuery,
+  skillsQuery,
 } from './sanity/queries'
-import { mapHomepage, mapPost, mapProject, mapPosts, mapProjects } from './sanity/mappers'
+import { mapHomepage, mapPost, mapProject, mapPosts, mapProjects, mapSkills } from './sanity/mappers'
 
 /**
  * Fetch homepage content from Sanity
@@ -183,6 +184,22 @@ export async function getProjectBySlug(
   } catch (error) {
     console.error(`Error fetching project with slug "${slug}":`, error)
     return null
+  }
+}
+
+/**
+ * Fetch skills and certifications content from Sanity
+ * @param preview - Enable draft/preview mode
+ * @returns Skills content (empty categories/certifications if not yet created)
+ */
+export async function getSkills(preview = false): Promise<Skills> {
+  try {
+    const client = getClient(preview)
+    const data = await client.fetch<SanitySkills | null>(skillsQuery)
+    return mapSkills(data)
+  } catch (error) {
+    console.error('Error fetching skills content:', error)
+    return { techCategories: [], certifications: [] }
   }
 }
 
