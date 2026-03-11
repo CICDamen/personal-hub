@@ -46,10 +46,18 @@ export default async function HomePage() {
 
   return (
     <main>
-      <Hero content={homepage} />
-      <About bio={homepage.bio} />
-      <FeaturedProjects projects={featuredProjects} />
-      <RecentBlogPosts posts={recentPosts} />
+      <div id="hero">
+        <Hero content={homepage} />
+      </div>
+      <div id="about">
+        <About bio={homepage.bio} />
+      </div>
+      <div id="projects">
+        <FeaturedProjects projects={featuredProjects} />
+      </div>
+      <div id="blog">
+        <RecentBlogPosts posts={recentPosts} />
+      </div>
     </main>
   )
 }
