@@ -193,6 +193,40 @@ export const featuredProjectsQuery = `
 `
 
 /**
+ * Skills & Certifications Queries
+ */
+
+// Fetch the skills singleton document
+export const skillsQuery = `
+  *[_type == "skills"][0] {
+    _id,
+    _type,
+    "techCategories": techCategories[] {
+      _key,
+      name,
+      "items": items[] {
+        _key,
+        name,
+        iconSlug,
+        url
+      }
+    },
+    "certifications": certifications[] {
+      _key,
+      name,
+      issuer,
+      dateEarned,
+      expiryDate,
+      link,
+      "image": image {
+        ${imageProjection}
+      },
+      issuerIconSlug
+    }
+  }
+`
+
+/**
  * Type guard to check if a query result is non-null
  * @param result - Query result to check
  * @returns True if result exists

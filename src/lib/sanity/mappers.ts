@@ -7,9 +7,11 @@ import type {
   SanityHomepage,
   SanityPost,
   SanityProject,
+  SanitySkills,
   Homepage,
   BlogPost,
   Project,
+  Skills,
   SanityImage,
   ProcessedImage,
 } from '@/types/cms'
@@ -120,4 +122,35 @@ export function mapPosts(docs: SanityPost[]): BlogPost[] {
  */
 export function mapProjects(docs: SanityProject[]): Project[] {
   return docs.map(mapProject)
+}
+
+/**
+ * Map Sanity skills document to Skills interface
+ * @param doc - Raw Sanity skills document (may be null if not yet created)
+ * @returns Skills object for application use
+ */
+export function mapSkills(doc: SanitySkills | null): Skills {
+  if (!doc) {
+    return { techCategories: [], certifications: [] }
+  }
+
+  return {
+    techCategories: (doc.techCategories || []).map((cat) => ({
+      name: cat.name,
+      items: (cat.items || []).map((item) => ({
+        name: item.name,
+        iconSlug: item.iconSlug,
+        url: item.url,
+      })),
+    })),
+    certifications: (doc.certifications || []).map((cert) => ({
+      name: cert.name,
+      issuer: cert.issuer,
+      dateEarned: cert.dateEarned,
+      expiryDate: cert.expiryDate,
+      link: cert.link,
+      image: mapSanityImage(cert.image, cert.name),
+      issuerIconSlug: cert.issuerIconSlug,
+    })),
+  }
 }

@@ -1,6 +1,75 @@
 import type { Image } from 'sanity'
 
 /**
+ * A single technology item (language, tool, platform, etc.)
+ */
+export interface TechItem {
+  name: string
+  /** Simple Icons slug for the icon (auto-derived from name if not set) */
+  iconSlug?: string
+  url?: string
+}
+
+/**
+ * A group of related technologies
+ */
+export interface TechCategory {
+  name: string
+  items: TechItem[]
+}
+
+/**
+ * A professional certification or credential
+ */
+export interface Certification {
+  name: string
+  issuer: string
+  dateEarned?: string
+  expiryDate?: string
+  link?: string
+  image?: ProcessedImage
+  /** Simple Icons slug for the issuing organization */
+  issuerIconSlug?: string
+}
+
+/**
+ * Skills & Certifications page content
+ * Singleton document
+ */
+export interface Skills {
+  techCategories: TechCategory[]
+  certifications: Certification[]
+}
+
+/**
+ * Raw skills document from Sanity
+ */
+export interface SanitySkills {
+  _id: string
+  _type: 'skills'
+  techCategories?: Array<{
+    _key: string
+    name: string
+    items?: Array<{
+      _key: string
+      name: string
+      iconSlug?: string
+      url?: string
+    }>
+  }>
+  certifications?: Array<{
+    _key: string
+    name: string
+    issuer: string
+    dateEarned?: string
+    expiryDate?: string
+    link?: string
+    image?: SanityImage
+    issuerIconSlug?: string
+  }>
+}
+
+/**
  * Sanity image reference type
  * Raw image data from Sanity before URL transformation
  */
