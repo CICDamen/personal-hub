@@ -4,11 +4,13 @@ import About from '@/components/About'
 import FeaturedProjects from '@/components/FeaturedProjects'
 import RecentBlogPosts from '@/components/RecentBlogPosts'
 import Skills from '@/components/Skills'
+import ClientLogos from '@/components/ClientLogos'
 import {
   getHomepageContent,
   getFeaturedProjects,
   getRecentBlogPosts,
   getSkills,
+  getClientLogos,
 } from '@/lib/cms'
 
 export const revalidate = 3600
@@ -40,11 +42,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [homepage, featuredProjects, recentPosts, skills] = await Promise.all([
+  const [homepage, featuredProjects, recentPosts, skills, clientLogos] = await Promise.all([
     getHomepageContent(),
     getFeaturedProjects(3),
     getRecentBlogPosts(3),
     getSkills(),
+    getClientLogos(),
   ])
 
   return (
@@ -62,6 +65,7 @@ export default async function HomePage() {
       <div id="blog">
         <RecentBlogPosts posts={recentPosts} />
       </div>
+      <ClientLogos clientLogos={clientLogos} />
     </main>
   )
 }
