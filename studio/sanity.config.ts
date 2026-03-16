@@ -7,12 +7,13 @@ import homepage from '../sanity-schemas/homepage'
 import post from '../sanity-schemas/post'
 import project from '../sanity-schemas/project'
 import skills from '../sanity-schemas/skills'
+import clients from '../sanity-schemas/clients'
 
 // Define the actions that should be available for singleton documents
 const singletonActions = new Set(['publish', 'discardChanges', 'restore'])
 
 // Define the singleton document types
-const singletonTypes = new Set(['homepage', 'skills'])
+const singletonTypes = new Set(['homepage', 'skills', 'clients'])
 
 export default defineConfig({
   name: 'default',
@@ -45,6 +46,15 @@ export default defineConfig({
                   .schemaType('skills')
                   .documentId('skills')
               ),
+            // Singleton clients document
+            S.listItem()
+              .title('Client Logos')
+              .id('clients')
+              .child(
+                S.document()
+                  .schemaType('clients')
+                  .documentId('clients')
+              ),
             // Divider
             S.divider(),
             // Regular document types
@@ -56,7 +66,7 @@ export default defineConfig({
   ],
 
   schema: {
-    types: [homepage, post, project, skills],
+    types: [homepage, post, project, skills, clients],
     // Filter out singleton types from the global "New document" menu
     templates: (templates) =>
       templates.filter(({ schemaType }) => !singletonTypes.has(schemaType)),

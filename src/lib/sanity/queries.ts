@@ -227,6 +227,26 @@ export const skillsQuery = `
 `
 
 /**
+ * Client Logos Queries
+ */
+
+// Fetch the clients singleton document
+export const clientLogosQuery = `
+  *[_type == "clients"][0] {
+    _id,
+    _type,
+    "clients": clients[] {
+      _key,
+      name,
+      "logo": logo {
+        ${imageProjection}
+      },
+      url
+    }
+  }
+`
+
+/**
  * Type guard to check if a query result is non-null
  * @param result - Query result to check
  * @returns True if result exists

@@ -8,10 +8,12 @@ import type {
   SanityPost,
   SanityProject,
   SanitySkills,
+  SanityClients,
   Homepage,
   BlogPost,
   Project,
   Skills,
+  ClientLogos,
   SanityImage,
   ProcessedImage,
 } from '@/types/cms'
@@ -122,6 +124,31 @@ export function mapPosts(docs: SanityPost[]): BlogPost[] {
  */
 export function mapProjects(docs: SanityProject[]): Project[] {
   return docs.map(mapProject)
+}
+
+/**
+ * Map Sanity clients document to ClientLogos interface
+ * @param doc - Raw Sanity clients document (may be null if not yet created)
+ * @returns ClientLogos object for application use
+ */
+export function mapClientLogos(doc: SanityClients | null): ClientLogos {
+  if (!doc) {
+    return { clients: [] }
+  }
+
+  return {
+    clients: (doc.clients || [])
+      .map((client) => {
+        const logo = mapSanityImage(client.logo, client.name)
+        if (!logo) return null
+        return {
+          name: client.name,
+          logo,
+          url: client.url,
+        }
+      })
+      .filter((c): c is NonNullable<typeof c> => c !== null),
+  }
 }
 
 /**

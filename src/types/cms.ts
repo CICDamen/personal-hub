@@ -1,6 +1,37 @@
 import type { Image } from 'sanity'
 
 /**
+ * A single client with logo
+ */
+export interface Client {
+  name: string
+  logo: ProcessedImage
+  url?: string
+}
+
+/**
+ * Client logos section content
+ * Singleton document
+ */
+export interface ClientLogos {
+  clients: Client[]
+}
+
+/**
+ * Raw clients document from Sanity
+ */
+export interface SanityClients {
+  _id: string
+  _type: 'clients'
+  clients?: Array<{
+    _key: string
+    name: string
+    logo: SanityImage
+    url?: string
+  }>
+}
+
+/**
  * A single technology item (language, tool, platform, etc.)
  */
 export interface TechItem {
